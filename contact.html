@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>DeLoach Technologies</title>
+
+	<!-- Meta -->
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" href="favicon.ico">
+
+	<!-- Google Font -->
+	<link href="https://fonts.googleapis.com/css?family=Maven+Pro:400,500,700|Nunito:400,600,700" rel="stylesheet">
+
+	<!-- FontAwesome JS -->
+	<script defer src="assets/fontawesome/js/all.js"></script>
+
+
+	<!-- Theme CSS -->
+
+	<link id="theme-style" rel="stylesheet" href="assets/css/theme.css">
+
+	
+
+	<style>
+		.custom-alert {
+			padding: 15px;
+			margin-bottom: 20px;
+			border: 1px solid transparent;
+			border-radius: 4px;
+		}
+
+		.custom-alert-success {
+			color: #3c763d;
+			background-color: #dff0d8;
+			border-color: #d6e9c6;
+		}
+	</style>
+
+</head>
+
+<body>
+
+	<header class="header">
+	
+		<div class="branding">
+	
+			<div class="container position-relative">
+	
+				<nav class="navbar navbar-expand-lg">
+					<h1 class="site-logo"><a class="navbar-brand" href="index.html">
+							<img class="logo-icon" src="assets/images/logo-icon.svg?v=8" alt="logo"> <span
+								class="logo-text">DeLoach <span class="alt rounded">Tech</span></span></a></h1>
+					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation"
+						aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+	
+				</nav>
+	
+	
+			</div><!--//container-->
+		</div><!--//branding-->
+	
+	
+	
+	</header>
+
+
+	<div class="page-header text-center py-5">
+		<div class="container">
+			<h2 class="page-title pt-2 mb-3 font-weight-bold">Contact Us</h2>
+			<div class="page-intro single-col-max-width mx-auto mb-5">Use the contact form below,
+				or call us at (800) 910-6557 to speak with a representative.</div>
+		</div>
+
+	</div><!--//container-->
+	</div><!--//page-header-->
+
+	<section class="contact-form-section pb-5">
+
+
+		<div class="container pb-5">
+
+			<!-- <div id="alert" class="custom-alert custom-alert-success single-col-max-width mx-auto d-none">
+				Your message has been sent!
+			</div> -->
+
+			<div id="form-container" class="form-wrapper shadow-lg single-col-max-width mx-auto h-100 p-5">
+
+				<form id="contact-form" class="contact-form" method="post" action="">
+					<!-- <h3 class="text-center mb-4">Contact Form</h3> -->
+					<div class="row g-3">
+						<div class="col-md-6">
+							<label class="sr-only" for="name">Name</label>
+							<input type="text" class="form-control" id="name" name="name" placeholder="Name">
+						</div>
+						<div class="col-md-6">
+							<label class="sr-only" for="email">Email</label>
+							<input type="email" class="form-control" id="email" name="email" placeholder="Email">
+							<div class="invalid-feedback"></div>
+						</div>
+						<div class="col-12">
+							<label class="sr-only" for="message">Your message</label>
+							<textarea class="form-control" id="message" name="message" placeholder="Enter your message"
+								rows="10"></textarea>
+							<div class="invalid-feedback"></div>
+						</div>
+						<div class="col-12">
+							<button type="submit" class="btn w-100 btn-primary py-2">Submit Information</button>
+						</div>
+					</div><!--//form-row-->
+				</form>
+			</div>
+		</div><!--//container-->
+	</section><!--//contact-form-section-->
+
+
+
+
+	<!-- Javascript -->
+	<script type="text/javascript" src="assets/plugins/popper.min.js"></script>
+	<script type="text/javascript" src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+	<script>
+		// axios.get('./includes/header.html')
+		// 	.then(function (response) {
+		// 		document.getElementById('header-placeholder').innerHTML = response.data;
+		// 		document.getElementById('header-link-contact').classList.add('active');
+		// 	});
+
+		const submitForm = async (e) => {
+			e.preventDefault();
+			const form = document.getElementById('contact-form');
+			const formData = new FormData(form);
+			const data = {};
+			formData.forEach((value, key) => {
+				data[key] = value;
+			});
+
+			const button = e.target.querySelector('button[type="submit"]');
+			button.disabled = true;
+			button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+
+			try {
+
+				const response = await axios.post('https://api.bootstrap.com/v1/app/contact', data, {
+					headers: {
+						'Authorization': 'demo'
+					}
+				});
+
+				button.disabled = false;
+				button.innerHTML = 'Submit Information';
+
+				form.reset();
+				// document.getElementById('alert').classList.remove('d-none');
+				document.getElementById('form-container').classList.add('d-none');
+				alert('Your message has been sent!');
+
+			} catch (error) {
+				const errorFields = error?.response?.data?.error?.fields;
+
+				for (const field in errorFields) {
+					const e = document.getElementById(field);
+					e.classList.add('is-invalid');
+					e.nextElementSibling.innerHTML = errorFields[field];
+				}
+			} finally {
+				button.disabled = false;
+				button.innerHTML = 'Submit Information';
+			}
+		}
+
+
+		document.getElementById('contact-form').addEventListener('submit', submitForm);
+
+	</script>
+
+</body>
+
+</html>
